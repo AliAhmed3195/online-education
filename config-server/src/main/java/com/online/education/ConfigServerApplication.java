@@ -9,7 +9,7 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 import java.util.List;
 
 @SpringBootApplication
-//@EnableConfigServer
+@EnableConfigServer
 public class ConfigServerApplication {
 
 //	@Value("${gateway.server.swagger.permission}")
