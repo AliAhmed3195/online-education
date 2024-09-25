@@ -5,7 +5,19 @@
 	<groupId>com.online.education</groupId>
 	<artifactId>online-education</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>online-education</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <name>online-education</name>
 	<packaging>pom</packaging>
 	<description>Project for Online Education</description>
 	<parent>
@@ -16,7 +28,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-boot.version>3.0.10</spring-boot.version>
-		<spring-cloud.version>2022.0.4</spring-cloud.version>
+		<spring-cloud.version>2022.0.3</spring-cloud.version>
 		<jar-snapshot.version>0.0.1-SNAPSHOT</jar-snapshot.version>
 		<spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
 		<spring-security-jwt.version>1.0.10.RELEASE</spring-security-jwt.version>
@@ -25,15 +37,17 @@
 		<jsonwebtoken.version>0.9.1</jsonwebtoken.version>
 		<passaableConfigSery.version>1.6.2</passaableConfigSery.version>
 		<mysql-jdbc.version>8.0.33</mysql-jdbc.version>
-		<springfox-swagger.version>3.0.0</springfox-swagger.version>
+<!--		<springfox-swagger.version>3.0.0</springfox-swagger.version>-->
 		<poiji.version>3.0.0</poiji.version>
 	</properties>
 	<modules>
 		<module>config-server</module>
 		<module>discovery-server</module>
 		<module>gateway-server</module>
-		<module>auth-server</module>
+		<module>common</module>
 		<module>common-persistence-service</module>
+		<module>auth-server</module>
+
 	</modules>
 </project>
 

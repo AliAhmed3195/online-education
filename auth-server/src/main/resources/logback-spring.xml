@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property name="LOGS" value="./logs/gateway-server" />
+    <property name="LOGS" value="./logs/auth-server" />
 
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -31,8 +31,12 @@
         <facility>USER</facility>
         <port>514</port>
         <throwableExcluded>true</throwableExcluded>
-        <suffixPattern>GATEWAY-SERVER thread-name:%t %p %c %m</suffixPattern>
+        <suffixPattern>AUTH-SERVER thread-name:%t %p %c %m</suffixPattern>
     </appender>
+
+<!--
+    <logger name="org.hibernate.SQL" level="DEBUG" />
+-->
 
     <!-- LOG everything at INFO level -->
     <root level="info">
