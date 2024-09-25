@@ -7,7 +7,7 @@
 		<artifactId>online-education</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.online.education</groupId>.
+	<groupId>com.online.education</groupId>
 	<artifactId>discovery-server</artifactId>
 	<version>${jar-snapshot.version}</version>
 	<name>discovery-server</name>
@@ -35,6 +35,14 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-		</plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
+            </plugin>
+        </plugins>
 	</build>
 </project>
