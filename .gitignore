@@ -3,7 +3,8 @@
 */target/**
 /logs/
 */logs/**
-
+/logs/auth-server/
+/logs/discovery-server/
 /lib
 
 

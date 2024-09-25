@@ -19,3 +19,17 @@
 2024-09-25 13:13:54,152 INFO  [http-nio-3333-exec-5] Adding property source: Config resource 'file [C:\Users\ALI~1.AHM\AppData\Local\Temp\config-repo-8711503857082579724\development\application-development.properties]' via location 'file:/C:/Users/ALI~1.AHM/AppData/Local/Temp/config-repo-8711503857082579724/development/'
 2024-09-25 13:19:58,953 INFO  [http-nio-3333-exec-10] Adding property source: Config resource 'file [C:\Users\ALI~1.AHM\AppData\Local\Temp\config-repo-8711503857082579724\development\application-development.properties]' via location 'file:/C:/Users/ALI~1.AHM/AppData/Local/Temp/config-repo-8711503857082579724/development/'
 2024-09-25 13:31:41,028 INFO  [http-nio-3333-exec-4] Adding property source: Config resource 'file [C:\Users\ALI~1.AHM\AppData\Local\Temp\config-repo-8711503857082579724\development\application-development.properties]' via location 'file:/C:/Users/ALI~1.AHM/AppData/Local/Temp/config-repo-8711503857082579724/development/'
+2024-09-25 14:46:24,411 WARN  [Thread-3] Failed to delete temporary directory on exit: java.nio.file.AccessDeniedException: C:\Users\ALI~1.AHM\AppData\Local\Temp\config-repo-8711503857082579724\.git\objects\pack\pack-5cfb646113633dcd79bdd5fb40d0812952b709a5.idx
+2024-09-25 14:46:28,992 INFO  [background-preinit] HV000001: Hibernate Validator 8.0.1.Final
+2024-09-25 14:46:29,023 INFO  [main] Starting ConfigServerApplication using Java 17.0.9 with PID 28088 (D:\Personal-Proj\online-education\config-server\target\classes started by Ali.Ahmed in D:\Personal-Proj\online-education)
+2024-09-25 14:46:29,025 INFO  [main] The following 1 profile is active: "development"
+2024-09-25 14:46:29,806 INFO  [main] BeanFactory id=4afeb9e0-477a-3da8-9063-021cd6fc2ae6
+2024-09-25 14:46:30,025 INFO  [main] Tomcat initialized with port(s): 3333 (http)
+2024-09-25 14:46:30,032 INFO  [main] Initializing ProtocolHandler ["http-nio-3333"]
+2024-09-25 14:46:30,033 INFO  [main] Starting service [Tomcat]
+2024-09-25 14:46:30,034 INFO  [main] Starting Servlet engine: [Apache Tomcat/10.1.12]
+2024-09-25 14:46:30,114 INFO  [main] Initializing Spring embedded WebApplicationContext
+2024-09-25 14:46:30,115 INFO  [main] Root WebApplicationContext: initialization completed in 1051 ms
+2024-09-25 14:46:30,761 INFO  [main] Starting ProtocolHandler ["http-nio-3333"]
+2024-09-25 14:46:30,779 INFO  [main] Tomcat started on port(s): 3333 (http) with context path ''
+2024-09-25 14:46:30,889 INFO  [main] Started ConfigServerApplication in 2.446 seconds (process running for 3.574)
