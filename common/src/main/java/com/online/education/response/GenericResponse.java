@@ -2,6 +2,7 @@ package com.online.education.response;
 
 import lombok.Getter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -22,5 +23,12 @@ public class GenericResponse {
 
     public static GenericResponse createErrorResponse(String error) {
         return new GenericResponse(null, error, 0);
+    }
+
+
+    public static GenericResponse createSuccessResponse(String message, String key, Object data) {
+        GenericResponse response = new GenericResponse(message, null, 1);
+        response.data = new HashMap<String, Object>() {{ put(key, data); }};
+        return response;
     }
 }
