@@ -8,10 +8,8 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -45,21 +43,38 @@ public class JwtTokenGenerator {
     }
 
     private String createAccessToken(TradeFlowUser user, Instant now, String uuid) {
-        return accessTokenEncoder.encode(JwtEncoderParameters.from(
-                JwtClaimsSet.builder()
-                        .issuer(GlobalConstantTokenGeneration.JWT_ISSUER)
-                        .issuedAt(now)
-                        .expiresAt(now.plus(accessTokenValiditySeconds, ChronoUnit.SECONDS))
-                        .subject(user.getUsername())
-                        .claim(GlobalConstantTokenGeneration.COMPANY_ID_KEY, String.valueOf(user.getCompanyId()))
-                        .claim(GlobalConstantTokenGeneration.USERNAME_KEY, String.valueOf(user.getUsername()))
-                        .claim(GlobalConstantTokenGeneration.USERID_KEY, String.valueOf(user.getId()))
-//                        .claim(GlobalConstantTokenGeneration.USER_ROLE_ID, String.valueOf(user.getRoles().stream().findFirst().get().getId()))
-                        .claim(GlobalConstantTokenGeneration.USER_TYPE_NAME, String.valueOf(user.getUserType()!=null ? user.getUserType().getName() : Strings.EMPTY))
-                        .claim(GlobalConstantTokenGeneration.USER_TYPE_ID, String.valueOf(user.getUserType()!=null ? user.getUserType().getId() : Strings.EMPTY))
-                        .claim(GlobalConstantTokenGeneration.UUID_KEY, uuid)
-                        .build()
-        )).getTokenValue();
+//        return accessTokenEncoder.encode(JwtEncoderParameters.from(
+//                JwtClaimsSet.builder()
+//                        .issuer(GlobalConstantTokenGeneration.JWT_ISSUER)
+//                        .issuedAt(now)
+//                        .expiresAt(now.plus(accessTokenValiditySeconds, ChronoUnit.SECONDS))
+//                        .subject(user.getUsername())
+//                        .claim(GlobalConstantTokenGeneration.COMPANY_ID_KEY, String.valueOf(user.getCompanyId()))
+//                        .claim(GlobalConstantTokenGeneration.USERNAME_KEY, String.valueOf(user.getUsername()))
+//                        .claim(GlobalConstantTokenGeneration.USERID_KEY, String.valueOf(user.getId()))
+////                        .claim(GlobalConstantTokenGeneration.USER_ROLE_ID, String.valueOf(user.getRoles().stream().findFirst().get().getId()))
+//                        .claim(GlobalConstantTokenGeneration.USER_TYPE_NAME, String.valueOf(user.getUserType()!=null ? user.getUserType().getName() : Strings.EMPTY))
+//                        .claim(GlobalConstantTokenGeneration.USER_TYPE_ID, String.valueOf(user.getUserType()!=null ? user.getUserType().getId() : Strings.EMPTY))
+//                        .claim(GlobalConstantTokenGeneration.UUID_KEY, uuid)
+//                        .build()
+//        )).getTokenValue();
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer(GlobalConstantTokenGeneration.JWT_ISSUER)
+                .issuedAt(now)
+                .expiresAt(now.plus(accessTokenValiditySeconds, ChronoUnit.SECONDS))
+                .subject(user.getUsername())
+                .claim(GlobalConstantTokenGeneration.COMPANY_ID_KEY, String.valueOf(user.getCompanyId()))
+                .claim(GlobalConstantTokenGeneration.USERNAME_KEY, String.valueOf(user.getUsername()))
+                .claim(GlobalConstantTokenGeneration.USERID_KEY, String.valueOf(user.getId()))
+//                .claim(GlobalConstantTokenGeneration.USER_ROLE_ID, String.valueOf(user.getRoles().stream().findFirst().get().getId()))
+                .claim(GlobalConstantTokenGeneration.USER_TYPE_NAME, String.valueOf(user.getUserType()!=null ? user.getUserType().getName() : Strings.EMPTY))
+                .claim(GlobalConstantTokenGeneration.USER_TYPE_ID, String.valueOf(user.getUserType()!=null ? user.getUserType().getId() : Strings.EMPTY))
+                .claim(GlobalConstantTokenGeneration.UUID_KEY, uuid)
+                .build();
+        // Pass the correct HS256 JwsHeader explicitly when encoding
+        JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
+        JwtEncoderParameters encoderParameters = JwtEncoderParameters.from(jwsHeader, claims);
+        return accessTokenEncoder.encode(encoderParameters).getTokenValue();
     }
 
     private String createRefreshToken(TradeFlowUser user, Instant now) {
@@ -69,6 +84,9 @@ public class JwtTokenGenerator {
                 .expiresAt(now.plus(refreshTokenValiditySeconds, ChronoUnit.SECONDS))
                 .subject(user.getUsername())
                 .build();
-        return refreshTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
+        // Pass the correct HS256 JwsHeader explicitly when encoding
+        JwsHeader jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
+        JwtEncoderParameters encoderParameters = JwtEncoderParameters.from(jwsHeader, claimsSet);
+        return refreshTokenEncoder.encode(encoderParameters).getTokenValue();
     }
 }

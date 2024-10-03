@@ -34,7 +34,7 @@
 		<spring-security-jwt.version>1.0.10.RELEASE</spring-security-jwt.version>
 		<apache-poi.version>5.2.3</apache-poi.version>
 		<apache-commons-pool.version>2.11.1</apache-commons-pool.version>
-		<jsonwebtoken.version>0.9.1</jsonwebtoken.version>
+		<jsonwebtoken.version>0.11.5</jsonwebtoken.version>
 		<passaableConfigSery.version>1.6.2</passaableConfigSery.version>
 		<mysql-jdbc.version>8.0.33</mysql-jdbc.version>
 <!--		<springfox-swagger.version>3.0.0</springfox-swagger.version>-->
@@ -47,6 +47,7 @@
 		<module>common</module>
 		<module>common-persistence-service</module>
 		<module>auth-server</module>
+		<module>user-microservice</module>
 
 	</modules>
 </project>

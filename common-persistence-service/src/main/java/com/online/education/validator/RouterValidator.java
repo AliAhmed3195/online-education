@@ -16,10 +16,10 @@ public class RouterValidator {
     private Boolean swaggerPermission;
 
     public boolean isSecured(ServerHttpRequest request){
-        return isProceed(request.getURI().getPath());
+        return isSecured(request.getURI().getPath());
     }
 
-    public boolean isProceed(String request){
+    public boolean isSecured(String request){
         if( swaggerPermission && request.contains("/swagger-") ) {
             return false;
         }

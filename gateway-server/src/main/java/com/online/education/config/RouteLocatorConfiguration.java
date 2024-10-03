@@ -15,6 +15,10 @@ public class RouteLocatorConfiguration {
                 .route("auth-server", r -> r.path("/auth-server/**")
                         .filters(f -> f.circuitBreaker(c -> c.setName("asFailure").setFallbackUri("fallback:/asFailure")))
                         .uri("lb://auth-server/"))
-                .build();
+                // configuring second route, for user microservice
+                .route("user-microservice", r -> r.path("/user-microservice/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName("usFailure").setFallbackUri("fallback:/usFailure")))
+                        .uri("lb://user-microservice/"))
+                . build();
     }
 }

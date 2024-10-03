@@ -1,27 +1,21 @@
 package com.online.education.security;
 
-
+import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
-import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.pqc.jcajce.provider.util.KeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
@@ -40,9 +34,9 @@ public class WebSecurity {
     @Value("${auth-server.public.uris}")
     private String[] publicUris;
 
-
+    @Value("${private.secret.key}")
+    private String secretKeyString;
     // Replace this with your actual simple key (shared symmetric key)
-    private final String secretKeyString = "e7f3a9c23bfe4d85a28b1cb8d26e82bc";
 
     // Refresh token key (different from access token for added security)
     private final String refreshTokenSecret = "c2f5a4c25dae4d6da35f1b6fd69e75ab";
@@ -67,7 +61,6 @@ public class WebSecurity {
                 ).build();
     }
 
-
     @Bean
     @Primary
     public JwtDecoder jwtAccessTokenDecoder() {
@@ -78,13 +71,21 @@ public class WebSecurity {
     @Bean
     @Primary
     public JwtEncoder jwtAccessTokenEncoder() {
-        SecretKey secretKey = generateSecretKey(secretKeyString);
-        OctetSequenceKey octetKey = new OctetSequenceKey.Builder(secretKey.getEncoded()).build();
+        // Create a SecretKey for HS256
+        SecretKey secretKey = new SecretKeySpec(secretKeyString.getBytes(), "HmacSHA256");
+        // Create OctetSequenceKey (for symmetric algorithms like HS256)
+        OctetSequenceKey octetKey = new OctetSequenceKey.Builder(secretKey.getEncoded())
+//                .algorithm(JWSAlgorithm.HS256) // Specify HS256 in the header
+                .build();
+        // Create JwtEncoder with OctetSequenceKey for HS256
         return new NimbusJwtEncoder(new ImmutableJWKSet<>(new JWKSet(octetKey)));
     }
 
-
-
+    // Modify your token generation logic to explicitly set the JwsHeader with HS256
+//    @Bean
+//    public JwsHeader jwsHeader() {
+//        return JwsHeader.with(MacAlgorithm.HS256).build(); // HS256 explicitly using Spring Security's JwsAlgorithms
+//    }
 
     @Bean
     @Qualifier("jwtRefreshTokenDecoder")
@@ -92,33 +93,19 @@ public class WebSecurity {
         SecretKey secretKey = generateSecretKey(refreshTokenSecret);
         return NimbusJwtDecoder.withSecretKey(secretKey).build();
     }
-
     @Bean
     @Qualifier("jwtRefreshTokenEncoder")
     public JwtEncoder jwtRefreshTokenEncoder() {
         SecretKey secretKey = generateSecretKey(refreshTokenSecret);
-        OctetSequenceKey octetKey = new OctetSequenceKey.Builder(secretKey.getEncoded()).build();
+        OctetSequenceKey octetKey = new OctetSequenceKey.Builder(secretKey.getEncoded())
+//                .algorithm(JWSAlgorithm.HS256) // Specify HS256 in the header
+                .build();
         return new NimbusJwtEncoder(new ImmutableJWKSet<>(new JWKSet(octetKey)));
     }
-
 
     // Helper method to create a SecretKey from a string
     private SecretKey generateSecretKey(String secret) {
         return new SecretKeySpec(secret.getBytes(), "HmacSHA256");
     }
-
-//    @Bean
-//    @Primary
-//    public JwtDecoder jwtAccessTokenDecoder() {
-//        return NimbusJwtDecoder.withPublicKey(keyUtils.getAccessTokenPublicKey()).build();
-//    }
-//
-//    @Bean
-//    @Primary
-//    public JwtEncoder jwtAccessTokenEncoder() {
-//        return new NimbusJwtEncoder(new ImmutableJWKSet<>(new JWKSet(new RSAKey.Builder(keyUtils.getAccessTokenPublicKey())
-//                .privateKey(keyUtils.getAccessTokenPrivateKey()).build())));
-//    }
-//    private final String secretKey = "e7f3a9c23bfe4d85a28b1cb8d26e82bc";
 
 }

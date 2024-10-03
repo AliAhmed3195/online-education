@@ -25,7 +25,7 @@ import java.util.UUID;
 
 
 @Slf4j
-@Component
+@Component("userManagerAuthServiceImpl")
 public class UserManagerImpl implements UserManager {
 
     @Value("${general.invalid.user}")

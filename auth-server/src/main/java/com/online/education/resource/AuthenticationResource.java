@@ -5,6 +5,7 @@ import com.online.education.response.LoginResponse;
 import com.online.education.service.UserManager;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationResource {
 
     @Autowired
+    @Qualifier("userManagerAuthServiceImpl")
     private UserManager userManager;
 
 
@@ -22,5 +24,10 @@ public class AuthenticationResource {
             throw new IllegalArgumentException("Username and Password are required");
         }
         return userManager.getAccessTokenByLogin(httpServletRequest, request);
+    }
+
+    @PostMapping("/test")
+    public void getAccessTokens() {
+        System.out.println("abc");
     }
 }

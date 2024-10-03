@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 //@Data
 //@NoArgsConstructor
 //@AllArgsConstructor
@@ -30,6 +32,10 @@ public class TradeFlowUser extends BaseEntity {
     @Column(name = "PASSWORD")
     @Nonnull
     private String password;
+
+    @javax.persistence.Column(name = "LAST_PASSWORD_RESET_DATE")
+    @Nonnull
+    private Date lastPasswordResetDate;
 
 
     @Column(name = "FIRST_NAME")
