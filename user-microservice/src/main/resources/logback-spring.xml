@@ -31,7 +31,7 @@
         <facility>USER</facility>
         <port>514</port>
         <throwableExcluded>true</throwableExcluded>
-        <suffixPattern>AUTH-SERVER thread-name:%t %p %c %m</suffixPattern>
+        <suffixPattern>USER-MICROSERVICE thread-name:%t %p %c %m</suffixPattern>
     </appender>
 
 <!--

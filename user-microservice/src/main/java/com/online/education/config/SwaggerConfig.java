@@ -12,19 +12,20 @@ import java.util.List;
 
 public class SwaggerConfig {
 
-    @Bean
-    GroupedOpenApi publicApi(){
-        return GroupedOpenApi.builder()
-                .group("public")
-                .pathsToMatch("/public/**")
-                .build();
-    }
+//    @Bean
+//    GroupedOpenApi publicApi(){
+//        return GroupedOpenApi.builder()
+//                .group("public")
+//                .pathsToMatch("/public/**")
+//                .build();
+//    }
 
     @Bean
-    public GroupedOpenApi authApi() {
+    public GroupedOpenApi userMicroserviceApi() {
         return GroupedOpenApi.builder()
-                .group("auth-server")  // Group for authentication server
-                .pathsToMatch("/auth-server/**")  // Adjust to your auth server's base path
+                .group("user-microservice")
+                .pathsToMatch("/user-microservice/**")
+                .pathsToExclude("/auth-server/**")  // Exclude auth server endpoints
                 .build();
     }
 
