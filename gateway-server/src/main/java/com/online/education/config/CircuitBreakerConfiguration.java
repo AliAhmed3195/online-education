@@ -14,16 +14,16 @@ import java.time.Duration;
 @Configuration
 public class CircuitBreakerConfiguration {
 
-////    @Value("${gateway.circuit-breaker.timeout.millis}")
-//    private long TIMEOUT_MILLIS = 20000;
-//
-//    @Bean
-//    public Customizer<ReactiveResilience4JCircuitBreakerFactory> circuitBreakerFactoryCustomizer() {
-//        return factory -> factory.configureDefault(id ->
-//                new Resilience4JConfigBuilder(id)
-//                        .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
-//                        .timeLimiterConfig(TimeLimiterConfig.custom().timeoutDuration(Duration.ofMillis(TIMEOUT_MILLIS)).build())
-//                        .build());
-//    }
+    @Value("${gateway.circuit-breaker.timeout.millis}")
+    private long TIMEOUT_MILLIS = 20000;
+
+    @Bean
+    public Customizer<ReactiveResilience4JCircuitBreakerFactory> circuitBreakerFactoryCustomizer() {
+        return factory -> factory.configureDefault(id ->
+                new Resilience4JConfigBuilder(id)
+                        .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
+                        .timeLimiterConfig(TimeLimiterConfig.custom().timeoutDuration(Duration.ofMillis(TIMEOUT_MILLIS)).build())
+                        .build());
+    }
 
 }

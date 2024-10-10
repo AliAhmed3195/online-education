@@ -33,7 +33,7 @@ public class TradeFlowUser extends BaseEntity {
     @Nonnull
     private String password;
 
-    @javax.persistence.Column(name = "LAST_PASSWORD_RESET_DATE")
+    @Column(name = "LAST_PASSWORD_RESET_DATE")
     @Nonnull
     private Date lastPasswordResetDate;
 

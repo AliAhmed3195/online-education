@@ -8,42 +8,37 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 
-import java.util.List;
 
 public class SwaggerConfig {
 
-    @Bean
-    GroupedOpenApi publicApi(){
-        return GroupedOpenApi.builder()
-                .group("public")
-                .pathsToMatch("/public/**")
-                .build();
-    }
-
-    @Bean
-    public GroupedOpenApi authApi() {
-        return GroupedOpenApi.builder()
-                .group("auth-server")  // Group for authentication server
-                .pathsToMatch("/auth-server/**")  // Adjust to your auth server's base path
-                .build();
-    }
-
-    @Bean
-    public OpenAPI customOpenApi() {
-        return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new Components()
-                        .addSecuritySchemes("bearerAuth", new SecurityScheme()
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer")
-                                .bearerFormat("JWT")))
-                .info(new Info()
-                        .title("API")
-                        .version("v1")
-                        .description("API Documentation"))
-                .servers(List.of(
-                        new io.swagger.v3.oas.models.servers.Server()
-                                .url("http://localhost:3030")  // Local server
-                                .description("Local Server")));
-    }
+//    @Bean
+//    public GroupedOpenApi publicApi(){
+//        return GroupedOpenApi.builder()
+//                .group("public")
+//                .pathsToMatch("/public/**")
+//                .build();
+//    }
+//
+//    @Bean
+//    public GroupedOpenApi authApi() {
+//        return GroupedOpenApi.builder()
+//                .group("auth-server")
+//                .pathsToMatch("/auth-server/**")
+//                .build();
+//    }
+//
+//    @Bean
+//    public OpenAPI customOpenApi() {
+//        return new OpenAPI()
+//                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))  // Link security requirement to all endpoints
+//                .components(new Components()
+//                        .addSecuritySchemes("bearerAuth", new SecurityScheme()
+//                                .type(SecurityScheme.Type.HTTP)
+//                                .scheme("bearer")
+//                                .bearerFormat("JWT")))  // Define the bearer authentication scheme
+//                .info(new Info()
+//                        .title("API Documentation")
+//                        .version("v1")
+//                        .description("API documentation with bearer authentication"));
+//    }
 }
