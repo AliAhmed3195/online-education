@@ -70,31 +70,6 @@
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-		<dependency>
-			<groupId>com.online.education</groupId>
-			<artifactId>common-persistence-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
-		<!--		<dependency>-->
-<!--			<groupId>com.online.education</groupId>-->
-<!--			<artifactId>common-persistence-service</artifactId>-->
-<!--			<version>${jar-snapshot.version}</version>-->
-<!--			<scope>compile</scope>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>com.online.education</groupId>-->
-<!--			<artifactId>common</artifactId>-->
-<!--			<version>0.0.1-SNAPSHOT</version>-->
-<!--			<scope>compile</scope>-->
-<!--		</dependency>-->
-
-		<!--        <dependency>-->
-<!--            <groupId>com.online.education</groupId>-->
-<!--            <artifactId>common</artifactId>-->
-<!--            <version>${jar-snapshot.version}</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
 
     </dependencies>
 	<dependencyManagement>

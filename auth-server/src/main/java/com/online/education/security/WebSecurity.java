@@ -1,10 +1,15 @@
 package com.online.education.security;
 
-import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,8 +58,11 @@ public class WebSecurity {
                 authorizeHttpRequests(authorize -> authorize.requestMatchers(publicUris).permitAll()
                         // allow all swagger uris
                         .requestMatchers("/v2/api-docs", "/v3/api-docs/**", "/swagger-ui.html", "/configuration/ui", "/swagger-resources/**",
-                                "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger-ui/**").permitAll()
+                                "/configuration/security", "/webjars/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
+//        authorizeHttpRequests(authorize -> authorize
+//                .anyRequest().permitAll()  // Allow all requests without authentication
+//        )
                 .csrf().disable()
                 .cors().and()  // Enable CORS here
                 .httpBasic().disable()
@@ -126,6 +134,39 @@ public class WebSecurity {
     // Helper method to create a SecretKey from a string
     private SecretKey generateSecretKey(String secret) {
         return new SecretKeySpec(secret.getBytes(), "HmacSHA256");
+    }
+
+
+    @Bean
+    public GroupedOpenApi publicApi(){
+        return GroupedOpenApi.builder()
+                .group("public")
+                .pathsToMatch("/public/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi authApi() {
+        return GroupedOpenApi.builder()
+                .group("auth-server")
+                .pathsToMatch("/oauth/**", "/test")  // Update the paths here
+                .build();
+    }
+
+    @Bean
+    public OpenAPI customOpenApi() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Auth Server API Documentation")
+                        .version("v1")
+                        .description("This is the Auth Server API documentation")
+                )
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new Components()
+                        .addSecuritySchemes("bearerAuth", new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
     }
 
 }
