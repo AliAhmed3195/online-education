@@ -58,7 +58,7 @@ public class WebSecurity {
                 authorizeHttpRequests(authorize -> authorize.requestMatchers(publicUris).permitAll()
                         // allow all swagger uris
                         .requestMatchers("/v2/api-docs", "/v3/api-docs/**", "/swagger-ui.html", "/configuration/ui", "/swagger-resources/**",
-                                "/configuration/security", "/webjars/**", "/swagger-ui/**").permitAll()
+                                "/configuration/security", "/webjars/**", "/swagger-ui/**","/swagger-ui/index.html").permitAll()
                         .anyRequest().authenticated())
 //        authorizeHttpRequests(authorize -> authorize
 //                .anyRequest().permitAll()  // Allow all requests without authentication

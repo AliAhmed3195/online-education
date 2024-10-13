@@ -37,7 +37,7 @@ public class UserServiceFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) request;
 
-        if(!routerValidator.isSecured(req.getRequestURI()) ) {
+        if(!routerValidator.isSecured(req.getRequestURI()) || req.getRequestURI().contains("v3/api-docs")) {
             chain.doFilter(request, response);
             return;
         } else if (swaggerPermission && req.getRequestURI().contains("swagger")) {
@@ -79,6 +79,6 @@ public class UserServiceFilter implements Filter {
     private boolean hasPermission(String uri, long userRoleId) {
 //        return permissionService.getPermissionUriList(userRoleId)
 //                .stream().anyMatch(permissionUriView-> permissionUriView.getUri().equalsIgnoreCase(uri));
-        return false;
+        return true;
     }
 }

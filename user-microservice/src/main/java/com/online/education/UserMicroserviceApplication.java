@@ -18,6 +18,7 @@ public class UserMicroserviceApplication {
 
     @Bean(name = "userPasswordEncoder")
     public Argon2PasswordEncoder passwordEncoder(){
+
         return new Argon2PasswordEncoder(16, 32, 1, 4096, 3);
     }
 

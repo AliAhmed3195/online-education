@@ -14,8 +14,8 @@ import java.time.Duration;
 @Configuration
 public class CircuitBreakerConfiguration {
 
-    @Value("${gateway.circuit-breaker.timeout.millis}")
-    private long TIMEOUT_MILLIS = 20000;
+//    @Value("${gateway.circuit-breaker.timeout.millis}")
+    private long TIMEOUT_MILLIS = 4000;
 
     @Bean
     public Customizer<ReactiveResilience4JCircuitBreakerFactory> circuitBreakerFactoryCustomizer() {

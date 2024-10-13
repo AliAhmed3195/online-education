@@ -13,7 +13,9 @@ public class FallbackController {
         return "Auth server is currently unavailable";
     }
 
-
-
+    @GetMapping("/usFailure")
+    public @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE) String usFallback() {
+        return "User microservice is currently unavailable";
+    }
 
 }

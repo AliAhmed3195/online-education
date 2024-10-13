@@ -13,9 +13,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api")
 public class UserResource {
 
     @Autowired
@@ -30,5 +32,11 @@ public class UserResource {
         TradeFlowAuthentication authentication = (TradeFlowAuthentication) SecurityContextHolder.getContext().getAuthentication();
         return GenericResponse.createSuccessResponse(environment.getProperty("message.changed.user-password", "Successfully changed user password"),
                 "result", userManager.changePassword(request, requestDTO, authentication.getUsername()));
+    }
+
+
+    @PostMapping("/test")
+    public void getAccessTokens() {
+        System.out.println("abc");
     }
 }
