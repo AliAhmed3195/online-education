@@ -46,3 +46,6 @@ logs/auth-server/output.log
 /logs/discovery-server
 logs/gateway-server/output.log
 /logs/gateway-server
+
+logs/gateway-server/output.log
+logs/discovery-server/output.log
