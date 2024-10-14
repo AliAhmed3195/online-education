@@ -73,6 +73,14 @@ public class AuthenticationGlobalFilter implements GlobalFilter, Ordered  {
                 if ( hasAccessTokenExpired(claims.get(GlobalConstantTokenGeneration.USERNAME_KEY).toString())){
                     return this.onError(exchange, "User is un-authorized");
                 }
+                exchange.getRequest().mutate().headers(httpHeaders -> {
+                    httpHeaders.add(GlobalConstantTokenGeneration.USERNAME_KEY, claims.get(GlobalConstantTokenGeneration.USERNAME_KEY).toString());
+                    httpHeaders.add(GlobalConstantTokenGeneration.USERID_KEY, claims.get(GlobalConstantTokenGeneration.USERID_KEY).toString());
+                    httpHeaders.add(GlobalConstantTokenGeneration.COMPANY_ID_KEY, claims.get(GlobalConstantTokenGeneration.COMPANY_ID_KEY).toString());
+//                    httpHeaders.add(GlobalConstantTokenGeneration.USER_ROLE_ID, claims.get(GlobalConstantTokenGeneration.USER_ROLE_ID).toString());
+                    httpHeaders.add(GlobalConstantTokenGeneration.UUID_KEY, claims.get(GlobalConstantTokenGeneration.UUID_KEY).toString());
+//                    httpHeaders.set("Authorization", "Bearer " + decryptedToken);
+                }).build();
             } catch (Exception e) {
                 // Handle exceptions if necessary
                 return this.onError(exchange, "User is un-authorized");
