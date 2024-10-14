@@ -40,3 +40,9 @@ build/
 
 ### VS Code ###
 .vscode/
+logs/auth-server/output.log
+logs/auth-server/output.log
+/logs/config-server
+/logs/discovery-server
+logs/gateway-server/output.log
+/logs/gateway-server
