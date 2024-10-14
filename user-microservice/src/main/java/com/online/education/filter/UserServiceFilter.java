@@ -46,17 +46,17 @@ public class UserServiceFilter implements Filter {
         String username = req.getHeader(GlobalConstantTokenGeneration.USERNAME_KEY);
         String userId = req.getHeader(GlobalConstantTokenGeneration.USERID_KEY);
         String companyId = req.getHeader(GlobalConstantTokenGeneration.COMPANY_ID_KEY);
-        String userRoleId = req.getHeader(GlobalConstantTokenGeneration.USER_ROLE_ID);
+//        String userRoleId = req.getHeader(GlobalConstantTokenGeneration.USER_ROLE_ID);
 
         boolean hasPermission = false;
-        if( StringUtils.isNotBlank(username) && StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(companyId) &&
-                StringUtils.isNotBlank(userRoleId) ) {
+        if( StringUtils.isNotBlank(username) && StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(companyId)
+             ) {
             try {
 
-                if( hasPermission(req.getRequestURI(), Long.parseLong(userRoleId)) ) {
+                if( hasPermission(req.getRequestURI()) ) {
                     hasPermission = true;
                     SecurityContextHolder.getContext().setAuthentication(new TradeFlowAuthentication(username,
-                            Long.parseLong(userId), Long.parseLong(companyId), Long.parseLong(userRoleId)));
+                            Long.parseLong(userId), Long.parseLong(companyId)));
                 }
 
             } catch (Exception e) {
@@ -76,7 +76,7 @@ public class UserServiceFilter implements Filter {
         }
     }
 
-    private boolean hasPermission(String uri, long userRoleId) {
+    private boolean hasPermission(String uri) {
 //        return permissionService.getPermissionUriList(userRoleId)
 //                .stream().anyMatch(permissionUriView-> permissionUriView.getUri().equalsIgnoreCase(uri));
         return true;

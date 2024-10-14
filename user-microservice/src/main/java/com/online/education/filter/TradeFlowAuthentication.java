@@ -12,14 +12,14 @@ public class TradeFlowAuthentication implements Authentication {
     private String username;
     private Long userId;
     private Long companyId;
-    private Long userRoleId;
+//    private Long userRoleId;
     private boolean isAuthenticated;
 
-    public TradeFlowAuthentication(String username, Long userId, Long companyId, Long userRoleId) {
+    public TradeFlowAuthentication(String username, Long userId, Long companyId) {
         this.username = username;
         this.userId = userId;
         this.companyId = companyId;
-        this.userRoleId = userRoleId;
+//        this.userRoleId = userRoleId;
         isAuthenticated = true;
     }
 
@@ -71,9 +71,9 @@ public class TradeFlowAuthentication implements Authentication {
         return this.companyId;
     }
 
-    public Long getUserRoleId() {
-        return this.userRoleId;
-    }
+//    public Long getUserRoleId() {
+//        return this.userRoleId;
+//    }
 
 
 }

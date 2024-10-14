@@ -9,28 +9,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true)
-@Slf4j
-@EnableWebSecurity
 public class SwaggerConfig {
 
-    @Bean
-    public GroupedOpenApi publicApi(){
-        return GroupedOpenApi.builder()
-                .group("public")
-                .pathsToMatch("/public/**")
-                .build();
-    }
+//    @Bean
+//    public GroupedOpenApi publicApi(){
+//        return GroupedOpenApi.builder()
+//                .group("public")
+//                .pathsToMatch("/public/**")
+//                .build();
+//    }
 
     @Bean
     public GroupedOpenApi authApi() {
         return GroupedOpenApi.builder()
                 .group("user-microservice")
-                .pathsToMatch("/api/password/change/**", "/api/test")  // Update the paths here
+                .pathsToMatch("/api/password/change/**")  // Update the paths here
                 .build();
     }
 
@@ -40,8 +35,9 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("User Server API Documentation")
                         .version("v1")
-                        .description("This is the User Server API documentation")
-                )
+                        .description("This is the User Server API documentation"))
+                .addServersItem(new io.swagger.v3.oas.models.servers.Server()
+                        .url("http://localhost:3030/user-microservice")) // Point to the gateway server
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()

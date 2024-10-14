@@ -6,5 +6,4 @@ import lombok.Data;
 public class ChangePasswordRequestDTO {
     private String oldPassword;
     private String newPassword;
-    private String otp;
 }

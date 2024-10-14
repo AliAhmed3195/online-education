@@ -34,9 +34,4 @@ public class UserResource {
                 "result", userManager.changePassword(request, requestDTO, authentication.getUsername()));
     }
 
-
-    @PostMapping("/test")
-    public void getAccessTokens() {
-        System.out.println("abc");
-    }
 }

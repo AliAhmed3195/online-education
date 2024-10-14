@@ -48,8 +48,8 @@ public class SecurityConfiguration  {
         return httpSecurity.
                 authorizeHttpRequests(authorize -> authorize
                         // allow all swagger uris
-                        .requestMatchers("/api/**","/v2/api-docs", "/v3/api-docs/**", "/swagger-ui.html", "/configuration/ui", "/swagger-resources/**",
-                                "/configuration/security", "/webjars/**", "/swagger-ui/**","/swagger-ui/index.html").permitAll()
+                        .requestMatchers("/api/**", "/v3/api-docs/**", "/swagger-ui.html",  "/swagger-resources/**",
+                                 "/swagger-ui/**","/swagger-ui/index.html").permitAll()
                         .anyRequest().authenticated())
 //        authorizeHttpRequests(authorize -> authorize
 //                .anyRequest().permitAll()  // Allow all requests without authentication
