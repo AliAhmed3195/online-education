@@ -48,6 +48,7 @@
 		<module>common-persistence-service</module>
 		<module>auth-server</module>
 		<module>user-microservice</module>
+		<module>inventory-microservice</module>
 
 	</modules>
 </project>
