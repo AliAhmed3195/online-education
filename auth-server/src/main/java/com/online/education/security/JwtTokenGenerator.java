@@ -66,7 +66,7 @@ public class JwtTokenGenerator {
                 .claim(GlobalConstantTokenGeneration.COMPANY_ID_KEY, String.valueOf(user.getCompanyId()))
                 .claim(GlobalConstantTokenGeneration.USERNAME_KEY, String.valueOf(user.getUsername()))
                 .claim(GlobalConstantTokenGeneration.USERID_KEY, String.valueOf(user.getId()))
-//                .claim(GlobalConstantTokenGeneration.USER_ROLE_ID, String.valueOf(user.getRoles().stream().findFirst().get().getId()))
+                .claim(GlobalConstantTokenGeneration.USER_ROLE_ID, String.valueOf(user.getRoles().stream().findFirst().get().getId()))
                 .claim(GlobalConstantTokenGeneration.USER_TYPE_NAME, String.valueOf(user.getUserType()!=null ? user.getUserType().getName() : Strings.EMPTY))
                 .claim(GlobalConstantTokenGeneration.USER_TYPE_ID, String.valueOf(user.getUserType()!=null ? user.getUserType().getId() : Strings.EMPTY))
                 .claim(GlobalConstantTokenGeneration.UUID_KEY, uuid)

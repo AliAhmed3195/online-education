@@ -77,7 +77,8 @@ public class AuthenticationGlobalFilter implements GlobalFilter, Ordered  {
                     httpHeaders.add(GlobalConstantTokenGeneration.USERNAME_KEY, claims.get(GlobalConstantTokenGeneration.USERNAME_KEY).toString());
                     httpHeaders.add(GlobalConstantTokenGeneration.USERID_KEY, claims.get(GlobalConstantTokenGeneration.USERID_KEY).toString());
                     httpHeaders.add(GlobalConstantTokenGeneration.COMPANY_ID_KEY, claims.get(GlobalConstantTokenGeneration.COMPANY_ID_KEY).toString());
-//                    httpHeaders.add(GlobalConstantTokenGeneration.USER_ROLE_ID, claims.get(GlobalConstantTokenGeneration.USER_ROLE_ID).toString());
+                    httpHeaders.add(GlobalConstantTokenGeneration.USER_ROLE_ID, claims.get(GlobalConstantTokenGeneration.USER_ROLE_ID).toString());
+                    httpHeaders.add(GlobalConstantTokenGeneration.USER_TYPE_ID, claims.get(GlobalConstantTokenGeneration.USER_TYPE_ID).toString());
                     httpHeaders.add(GlobalConstantTokenGeneration.UUID_KEY, claims.get(GlobalConstantTokenGeneration.UUID_KEY).toString());
 //                    httpHeaders.set("Authorization", "Bearer " + decryptedToken);
                 }).build();

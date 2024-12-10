@@ -1,5 +1,6 @@
 package com.online.education.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,17 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Entity
-//@Table(name = "TRADE_FLOW_USER")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table
+@Table(name = "TRADE_FLOW_USER")
 public class TradeFlowUser extends BaseEntity {
     @Id
     @Column(name = "ID")
@@ -62,4 +60,12 @@ public class TradeFlowUser extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_TYPE_ID")
     private UserType userType;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USER_ROLE",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
+    private Set<Role> roles;
 }

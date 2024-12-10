@@ -19,6 +19,16 @@ public class RouteLocatorConfiguration {
                 .route("user-microservice", r -> r.path("/user-microservice/**")
                         .filters(f -> f.circuitBreaker(c -> c.setName("usFailure").setFallbackUri("fallback:/usFailure")))
                         .uri("lb://user-microservice/"))
+                // configuring third route, for inventory microservice
+                .route("inventory-microservice", r -> r.path("/inventory-microservice/**")
+                        .filters(f -> f.circuitBreaker(c -> c.setName("inventoryFailure").setFallbackUri("fallback:/inventoryFailure")))
+                        .uri("lb://inventory-microservice/"))
+                // configuring fourth route, for order processing microservice
+                .route("order-processing-microservice", r -> r.path("/order-processing-microservice/**")
+                .filters(f -> f.circuitBreaker(c -> c.setName("orderFailure").setFallbackUri("fallback:/orderFailure")))
+                .uri("lb://order-processing-microservice/"))
                 . build();
+
+
     }
 }

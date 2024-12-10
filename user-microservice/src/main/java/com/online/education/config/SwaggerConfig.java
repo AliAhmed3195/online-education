@@ -13,19 +13,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
-//    @Bean
-//    public GroupedOpenApi publicApi(){
-//        return GroupedOpenApi.builder()
-//                .group("public")
-//                .pathsToMatch("/public/**")
-//                .build();
-//    }
-
     @Bean
     public GroupedOpenApi authApi() {
         return GroupedOpenApi.builder()
                 .group("user-microservice")
-                .pathsToMatch("/api/password/change/**")  // Update the paths here
+                .pathsToMatch("/api/v1/**")  // Update the paths here
                 .build();
     }
 

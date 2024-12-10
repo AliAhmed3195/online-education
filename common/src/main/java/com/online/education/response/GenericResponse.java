@@ -31,4 +31,9 @@ public class GenericResponse {
         response.data = new HashMap<String, Object>() {{ put(key, data); }};
         return response;
     }
+
+    public static <T> GenericResponse createSuccessResponse(String message) {
+        GenericResponse response = new GenericResponse(message, null, 1);
+        return response;
+    }
 }

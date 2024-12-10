@@ -18,4 +18,13 @@ public class FallbackController {
         return "User microservice is currently unavailable";
     }
 
+    @GetMapping("/inventoryFailure")
+    public @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE) String inventoryFallback() {
+        return "Inventory microservice is currently unavailable";
+    }
+    @GetMapping("/orderFailure")
+    public @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE) String orderProcessingFallback() {
+        return "Order Processing microservice is currently unavailable";
+    }
+
 }
