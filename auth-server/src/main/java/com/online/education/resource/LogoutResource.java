@@ -1,20 +1,23 @@
 package com.online.education.resource;
 
-import com.nimbusds.jwt.util.DateUtils;
 import com.online.education.Repository.OAuthTokenRepository;
 import com.online.education.constant.GlobalConstantTokenGeneration;
 import com.online.education.entity.OAuthAccessToken;
 import com.online.education.response.GenericResponse;
 import com.online.education.response.LogoutResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
+@Slf4j
 @RestController
+@RequestMapping("/api/v1")
 public class LogoutResource {
 
     @Autowired
@@ -23,7 +26,7 @@ public class LogoutResource {
     @Autowired
     private Environment environment;
 
-    @PostMapping(path = "logout")
+    @PostMapping(path = "/logout")
     public GenericResponse logout(HttpServletRequest request){
         final String username = request.getHeader(GlobalConstantTokenGeneration.USERNAME_KEY);
         final String uuid = request.getHeader(GlobalConstantTokenGeneration.UUID_KEY);
