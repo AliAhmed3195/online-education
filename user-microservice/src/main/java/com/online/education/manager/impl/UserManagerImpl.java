@@ -47,4 +47,125 @@ public class UserManagerImpl implements UserManager {
             throw new IllegalArgumentException(invalidUserError);
         }
     }
+    @Override
+    public GenericResponse createUser( TradeFlowUserRequestDto user ){
+        TradeFlowUser tradeFlowUser = createTradeFlowUserObj(user);
+        tradeFlowUserRepository.save(  tradeFlowUser );
+        return GenericResponse.createSuccessResponse(environment.getProperty(USER_CREATED_SUCCESSFULLY));
+    }
+
+    @Override
+    public GenericResponse userList( UserSearchRequest userSearchRequest ){
+        Specification<TradeFlowUser> specification = commonSearchTradeFlowUserSpecification(userSearchRequest);
+
+        Page<TradeFlowUser> page = tradeFlowUserRepository.findAll(specification, PageRequest.of(userSearchRequest.getPageNumber()<=0 ? 0 : userSearchRequest.getPageNumber()-1,
+                userSearchRequest.getPageSize()<=0 ? 10 : userSearchRequest.getPageSize(),
+                Sort.Direction.DESC, "id"));
+        return GenericResponse.createSuccessResponse(
+                environment.getProperty(USER_SUCCESSFULLY_FETCH), "users",
+                new PaginatedResponseDTO(page.getContent(), page.getTotalElements()));
+    }
+
+    @Override
+    public GenericResponse findByUserId(UserIdRequest userIdRequest){
+        Optional<TradeFlowUser> user = tradeFlowUserRepository.findById( userIdRequest.getUserId() );
+        if( user.isPresent() ){
+            return GenericResponse.createSuccessResponse(
+                    environment.getProperty(USER_SUCCESSFULLY_FETCH),USER,user);
+        } else {
+            return GenericResponse.createSuccessResponse(environment.getProperty(USER_SUCCESSFULLY_FETCH));
+        }
+    }
+
+    @Override
+    public GenericResponse updateUserDetails( TradeFlowUser user){
+        tradeFlowUserRepository.save(user);
+        return GenericResponse.createSuccessResponse(environment.getProperty(USER_CREATED_SUCCESSFULLY));
+    }
+
+
+    @Override
+    public GenericResponse listBusinessRole(BusinessRoleSearchRequest roleSearchRequest) {
+
+        Specification<Role> specification = commonSearchRoleSpecification( roleSearchRequest );
+                Page<Role> roles = roleRepository.findAll( specification,
+                PageRequest.of(roleSearchRequest.getPageNumber() <= 0 ? 0 : roleSearchRequest.getPageNumber() - 1,
+                        roleSearchRequest.getPageSize() <= 0 ? 10 : roleSearchRequest.getPageSize(),
+                        Sort.Direction.DESC, CREATED_ON_ATTR));
+
+        return GenericResponse.createSuccessResponse(
+                environment.getProperty(ADD_BUSINESS_ROLE_SUCCESS), "businessRoles",
+                new PaginatedResponseDTO(roles.getContent(), roles.getTotalElements()));
+    }
+
+
+    private static Specification<Role> commonSearchRoleSpecification(BusinessRoleSearchRequest searchDTO) {
+        Specification<Role> specification =
+                SpecificationUtility.equalsValue("isActive", true);
+        if( searchDTO.getRoleId() != null ){
+            specification = specification.and(SpecificationUtility.equalsValue("id", searchDTO.getRoleId()));
+        }
+        if (searchDTO.getRoleName() != null) {
+            specification = specification.and(SpecificationUtility.equalsValue("name", searchDTO.getRoleName()));
+        }
+        return specification;
+    }
+
+    private static Specification<TradeFlowUser> commonSearchTradeFlowUserSpecification( UserSearchRequest userSearchRequest) {
+        Specification<TradeFlowUser> specification =
+                SpecificationUtility.equalsValue("isActive", true);
+        if( userSearchRequest.getCompanyId() != null ) {
+            specification = specification.and(SpecificationUtility.equalsValue("companyId", userSearchRequest.getCompanyId()));
+        }
+        if( userSearchRequest.getEmployeeId() != null ) {
+            specification = specification.and(SpecificationUtility.containsValue("employeeId", userSearchRequest.getEmployeeId()));
+        }
+        if( userSearchRequest.getUsername() != null ) {
+            specification = specification.and(SpecificationUtility.equalsValue("username", userSearchRequest.getUsername()));
+        }
+        if( userSearchRequest.getUserTypeId() != null ) {
+            specification = specification.and(SpecificationUtility.equalsValue("userType","id", userSearchRequest.getUserTypeId()));
+        }
+        return specification;
+    }
+
+
+    private TradeFlowUser createTradeFlowUserObj( TradeFlowUserRequestDto user ){
+        TradeFlowUser tradeFlowUser = new TradeFlowUser();
+        tradeFlowUser.setFirstName( user.getFirstName() );
+        tradeFlowUser.setLastName( user.getLastName());
+        tradeFlowUser.setEmail( user.getEmail());
+        tradeFlowUser.setUsername( user.getUsername().toLowerCase());
+        tradeFlowUser.setEmployeeId(user.getEmployeeId());
+        tradeFlowUser.setMobileNo( user.getMobileNo());
+        tradeFlowUser.setCompanyId( user.getCompanyId() );
+        tradeFlowUser.setUserType( userTypeRepository.findByName( user.getUserType() ) );
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(user.getUserRoleId()));
+        tradeFlowUser.setRoles(roles);
+        return tradeFlowUser;
+    }
+
+
+    @Override
+    @Transactional
+    public GenericResponse addBusinessRole(BusinessRoleRequestDto requestDTO) {
+        saveBusinessRole(requestDTO);
+        return GenericResponse.createSuccessResponse(environment.getProperty(ADD_BUSINESS_ROLE_SUCCESS_MESSAGE));
+    }
+
+
+    private GenericResponse saveBusinessRole(BusinessRoleRequestDto roleRequestDTO) {
+        Role newRole = new Role();
+        newRole.setName(roleRequestDTO.getRoleName());
+        newRole.setDescription(roleRequestDTO.getDescription());
+        newRole.setIsActive(true);
+        newRole.setUserType( userTypeRepository.findByName( roleRequestDTO.getUserTypeName()));
+        newRole.setCreatedBy(getPrincipal().getUsername());
+//        newRole.getModifiedBy( getPrincipal().getUsername());
+        Collection<PermissionGroup> permissionGroups = permissionGroupService.getPermissionsByIds(roleRequestDTO.getPermissionGroups().stream().toList());
+        newRole.setPermissionGroups(permissionGroups.stream().map(pg -> new PermissionGroup(pg.getId())).collect(Collectors.toSet()));
+        roleRepository.save(newRole);
+        return new GenericResponse("Business Role created successfully!", null, 1);
+    }
 }

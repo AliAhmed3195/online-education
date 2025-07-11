@@ -1,3 +1,6 @@
+
+
+
 package com.online.education.filter;
 
 import com.online.education.constant.GlobalConstantTokenGeneration;
@@ -52,7 +55,6 @@ public class UserServiceFilter implements Filter {
         if( StringUtils.isNotBlank(username) && StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(companyId)
              ) {
             try {
-
                 if( hasPermission(req.getRequestURI()) ) {
                     hasPermission = true;
                     SecurityContextHolder.getContext().setAuthentication(new TradeFlowAuthentication(username,

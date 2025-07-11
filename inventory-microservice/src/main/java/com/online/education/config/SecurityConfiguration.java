@@ -48,8 +48,8 @@ public class SecurityConfiguration  {
         return httpSecurity.
                 authorizeHttpRequests(authorize -> authorize
                         // allow all swagger uris
-                        .requestMatchers("/api/**", "/v3/api-docs/**", "/swagger-ui.html",  "/swagger-resources/**",
-                                 "/swagger-ui/**","/swagger-ui/index.html").permitAll()
+                        .requestMatchers("/api/**", "/Uploads/**",  "/v3/api-docs/**", "/swagger-ui.html",  "/swagger-resources/**",
+                                "/swagger-ui/**","/swagger-ui/index.html").permitAll()
                         .anyRequest().authenticated())
 //        authorizeHttpRequests(authorize -> authorize
 //                .anyRequest().permitAll()  // Allow all requests without authentication
@@ -63,7 +63,8 @@ public class SecurityConfiguration  {
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-                ).build();
+                )
+                .build();
     }
 
     // If you need the AuthenticationManager bean
@@ -74,14 +75,14 @@ public class SecurityConfiguration  {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3030")); // Allow the gateway origin
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3030", "http://localhost:4200")); // Allow the gateway origin
         config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);  // Cache the preflight response for 1 hour
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/inventory-microservice**", config);
         return new CorsFilter(source);
     }
 }
