@@ -17,7 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+<<<<<<< Updated upstream
 @RequestMapping("/api")
+=======
+@RequestMapping("/api/v1")
+
+>>>>>>> Stashed changes
 public class UserResource {
 
     @Autowired
