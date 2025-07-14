@@ -1,10 +1,8 @@
 package com.online.education.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.online.education.entity.ItemImage;
 import com.online.education.entity.ItemVariant;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

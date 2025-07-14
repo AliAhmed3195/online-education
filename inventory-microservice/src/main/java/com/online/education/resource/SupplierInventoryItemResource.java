@@ -5,7 +5,6 @@ import com.online.education.request.ItemRequestDTO;
 import com.online.education.request.ItemSearchRequest;
 import com.online.education.response.GenericResponse;
 import com.online.education.service.InventoryItemService;
-import jakarta.validation.constraints.DecimalMax;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
