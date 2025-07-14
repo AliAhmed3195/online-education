@@ -2,7 +2,9 @@ package com.online.education.Repository;
 
 import com.online.education.entity.Permission;
 import com.online.education.projection.PermissionUriResponseView;
+
 import com.online.education.response.PermissionUriResponse;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

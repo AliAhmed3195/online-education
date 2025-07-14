@@ -6,10 +6,19 @@ import com.online.education.request.ItemSearchRequest;
 import com.online.education.response.GenericResponse;
 import com.online.education.service.InventoryItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.AccessDeniedException;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -18,13 +27,17 @@ public class AdminInventoryItemResource {
     @Autowired
     private InventoryItemService itemService;
 
-    @PostMapping("/admin/item/create")
-    public GenericResponse addItemRequest(@RequestBody ItemRequestDTO itemRequestDTO ){
-        return itemService.createItem( itemRequestDTO );
+
+    @PostMapping(value = "/admin/item/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public GenericResponse addItemRequest(
+            @RequestPart("item") ItemRequestDTO itemRequestDTO,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files
+    ) {
+        return itemService.createItem(itemRequestDTO, files);
     }
 
     @PostMapping("/admin/item/list")
-    public GenericResponse itemList( @RequestBody ItemSearchRequest itemSearchRequest ){
+    public GenericResponse itemList( @RequestBody ItemSearchRequest itemSearchRequest ) throws AccessDeniedException {
         return itemService.listItem( itemSearchRequest );
     }
 

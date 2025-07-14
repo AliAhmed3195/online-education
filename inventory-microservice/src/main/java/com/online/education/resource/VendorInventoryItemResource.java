@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -17,14 +23,24 @@ public class VendorInventoryItemResource {
 
     @Autowired
     private InventoryItemService itemService;
+//
+//    @PostMapping("/vendor/item/add")
+//    public GenericResponse addItemRequest( @RequestBody ItemRequestDTO itemRequestDTO ){
+//        return itemService.createItem( itemRequestDTO );
+//    }
 
-    @PostMapping("/vendor/item/add")
-    public GenericResponse addItemRequest( @RequestBody ItemRequestDTO itemRequestDTO ){
-        return itemService.createItem( itemRequestDTO );
+//    @PostMapping("/vendor/item/list")
+//    public GenericResponse itemList( @RequestBody ItemSearchRequest itemSearchRequest ) {
+//    }
+    @PostMapping(value = "/vendor/item/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public GenericResponse addItemRequest(
+            @RequestPart("item") ItemRequestDTO itemRequestDTO,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+        return itemService.createItem(itemRequestDTO, files);
     }
 
     @PostMapping("/vendor/item/list")
-    public GenericResponse itemList( @RequestBody ItemSearchRequest itemSearchRequest ){
+    public GenericResponse itemList( @RequestBody ItemSearchRequest itemSearchRequest ) throws AccessDeniedException {
         return itemService.listItem( itemSearchRequest );
     }
 

@@ -1,11 +1,15 @@
 package com.online.education.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -34,8 +38,21 @@ public class Item extends BaseEntity {
     @Column(name = "sku")
     private String sku;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemVariant> itemVariants;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "USER_TYPE_ID")
+    private UserType userType;
 
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private TradeFlowUser tradeFlowUser;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ItemVariant> itemVariants = new ArrayList<>();
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<ItemImage> itemImages;
 
 }
+

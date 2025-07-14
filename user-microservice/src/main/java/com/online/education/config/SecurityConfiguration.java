@@ -74,14 +74,14 @@ public class SecurityConfiguration  {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3030")); // Allow the gateway origin
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3030", "http://localhost:4200")); // Allow the gateway origin
         config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);  // Cache the preflight response for 1 hour
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/user-microservice/**", config);
         return new CorsFilter(source);
     }
 }

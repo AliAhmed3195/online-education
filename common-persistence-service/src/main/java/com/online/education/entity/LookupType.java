@@ -1,4 +1,6 @@
-//package com.online.education.entity;
+
+package com.online.education.entity;//package com.online.education.entity;
+
 //
 //import lombok.Data;
 //import lombok.NoArgsConstructor;
