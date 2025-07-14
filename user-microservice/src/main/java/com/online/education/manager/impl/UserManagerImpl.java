@@ -1,23 +1,38 @@
 package com.online.education.manager.impl;
 
+import com.online.education.Repository.RoleRepository;
 import com.online.education.Repository.TradeFlowUserRepository;
+import com.online.education.Repository.UserTypeRepository;
+import com.online.education.entity.PermissionGroup;
+import com.online.education.entity.Role;
 import com.online.education.entity.TradeFlowUser;
+import com.online.education.entity.UserType;
 import com.online.education.exception.UserServiceException;
+import com.online.education.filter.TradeFlowAuthentication;
 import com.online.education.manager.UserManager;
-import com.online.education.request.ChangePasswordRequestDTO;
+import com.online.education.request.*;
 import com.online.education.response.ChangePasswordResponseDTO;
 import com.online.education.response.GenericResponse;
+import com.online.education.response.PaginatedResponseDTO;
+import com.online.education.service.PermissionGroupService;
+import com.online.education.util.SpecificationUtility;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component("userManagerUserServiceImpl")
@@ -27,10 +42,33 @@ public class UserManagerImpl implements UserManager {
     private TradeFlowUserRepository tradeFlowUserRepository;
 
     @Autowired
+    private UserTypeRepository userTypeRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private PermissionGroupService permissionGroupService;
 
     @Value("${general.invalid.user}")
     private String invalidUserError;
+
+    private TradeFlowAuthentication getPrincipal() {
+        return  (TradeFlowAuthentication) SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    private static final String USER_CREATED_SUCCESSFULLY = "user.created.success";
+    private static final String USER_SUCCESSFULLY_FETCH = "user.fetch.success";
+    private static final String USER = "user";
+    private static final String ADD_BUSINESS_ROLE_SUCCESS= "user.role.fetch.success";
+    private static final String CREATED_ON_ATTR = "createdOn";
+    private static final String ADD_BUSINESS_ROLE_SUCCESS_MESSAGE = "user.role.create.success";
+
+    @Autowired
+    private Environment environment;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
 
     @Override
@@ -48,8 +86,9 @@ public class UserManagerImpl implements UserManager {
             throw new IllegalArgumentException(invalidUserError);
         }
     }
+
     @Override
-    public GenericResponse createUser(TradeFlowUserRequestDto user ){
+    public GenericResponse createUser( TradeFlowUserRequestDto user ){
         TradeFlowUser tradeFlowUser = createTradeFlowUserObj(user);
         tradeFlowUserRepository.save(  tradeFlowUser );
         return GenericResponse.createSuccessResponse(environment.getProperty(USER_CREATED_SUCCESSFULLY));
@@ -89,7 +128,7 @@ public class UserManagerImpl implements UserManager {
     public GenericResponse listBusinessRole(BusinessRoleSearchRequest roleSearchRequest) {
 
         Specification<Role> specification = commonSearchRoleSpecification( roleSearchRequest );
-                Page<Role> roles = roleRepository.findAll( specification,
+        Page<Role> roles = roleRepository.findAll( specification,
                 PageRequest.of(roleSearchRequest.getPageNumber() <= 0 ? 0 : roleSearchRequest.getPageNumber() - 1,
                         roleSearchRequest.getPageSize() <= 0 ? 10 : roleSearchRequest.getPageSize(),
                         Sort.Direction.DESC, CREATED_ON_ATTR));
@@ -116,16 +155,13 @@ public class UserManagerImpl implements UserManager {
         Specification<TradeFlowUser> specification =
                 SpecificationUtility.equalsValue("isActive", true);
         if( userSearchRequest.getCompanyId() != null ) {
-            specification = specification.and(SpecificationUtility.equalsValue("companyId", userSearchRequest.getCompanyId()));
+            specification = SpecificationUtility.equalsValue("companyId", userSearchRequest.getCompanyId());
         }
         if( userSearchRequest.getEmployeeId() != null ) {
-            specification = specification.and(SpecificationUtility.containsValue("employeeId", userSearchRequest.getEmployeeId()));
+            specification = SpecificationUtility.containsValue("employeeId", userSearchRequest.getEmployeeId());
         }
         if( userSearchRequest.getUsername() != null ) {
-            specification = specification.and(SpecificationUtility.equalsValue("username", userSearchRequest.getUsername()));
-        }
-        if( userSearchRequest.getUserTypeId() != null ) {
-            specification = specification.and(SpecificationUtility.equalsValue("userType","id", userSearchRequest.getUserTypeId()));
+            specification = SpecificationUtility.equalsValue("username", userSearchRequest.getUsername());
         }
         return specification;
     }
