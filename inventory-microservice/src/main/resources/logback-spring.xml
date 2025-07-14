@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
-    <property name="LOGS" value="./logs/auth-server" />
-
+    <property name="LOGS" value="./logs/inventory-microservice" />
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{}): %msg%n%throwable
+                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C): %msg%n%throwable
             </Pattern>
         </layout>
     </appender>
-
     <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS}/output.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d %p %C{} [%t] %m%n</Pattern>
+            <Pattern>%d %p  [%t] %m%n</Pattern>
         </encoder>
-
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily and when the file reaches 10 MegaBytes -->
             <fileNamePattern>${LOGS}/archived/output-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
@@ -25,18 +21,13 @@
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
     </appender>
-
     <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
         <syslogHost>127.0.0.1</syslogHost>
         <facility>USER</facility>
         <port>514</port>
         <throwableExcluded>true</throwableExcluded>
-        <suffixPattern>USER-MICROSERVICE thread-name:%t %p %c %m</suffixPattern>
+        <suffixPattern>CONFIG-SERVER thread-name:%t %p %c %m</suffixPattern>
     </appender>
-
-<!--
-    <logger name="org.hibernate.SQL" level="DEBUG" />
--->
 
     <!-- LOG everything at INFO level -->
     <root level="info">
