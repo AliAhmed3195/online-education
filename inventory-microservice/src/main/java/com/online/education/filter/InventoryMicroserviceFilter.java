@@ -1,6 +1,7 @@
 package com.online.education.filter;
 
 import com.online.education.constant.GlobalConstantTokenGeneration;
+import com.online.education.service.PermissionService;
 import com.online.education.util.Converter;
 import com.online.education.validator.RouterValidator;
 import jakarta.servlet.*;
@@ -12,7 +13,6 @@ import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,16 +21,18 @@ import java.util.HashMap;
 @Component
 @Order(1)
 @Slf4j
-public class UserServiceFilter implements Filter {
-
+public class InventoryMicroserviceFilter implements Filter {
     @Autowired
     private RouterValidator routerValidator;
 
-    @Value("${user.microservice.swagger.permission}")
+    @Value("${inventory.microservice.swagger.permission}")
     private Boolean swaggerPermission;
 
     @Value("${error.message.permission.denied}")
     private String permissionDeniedErrorMessage;
+
+    @Autowired
+    private PermissionService permissionService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -46,17 +48,16 @@ public class UserServiceFilter implements Filter {
         String username = req.getHeader(GlobalConstantTokenGeneration.USERNAME_KEY);
         String userId = req.getHeader(GlobalConstantTokenGeneration.USERID_KEY);
         String companyId = req.getHeader(GlobalConstantTokenGeneration.COMPANY_ID_KEY);
-//        String userRoleId = req.getHeader(GlobalConstantTokenGeneration.USER_ROLE_ID);
+        String userRoleId = req.getHeader(GlobalConstantTokenGeneration.USER_ROLE_ID);
 
         boolean hasPermission = false;
         if( StringUtils.isNotBlank(username) && StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(companyId)
-             ) {
+        ) {
             try {
-
-                if( hasPermission(req.getRequestURI()) ) {
+                if( hasPermission( req.getRequestURI(), Long.parseLong(userRoleId) ) ) {
                     hasPermission = true;
-                    SecurityContextHolder.getContext().setAuthentication(new TradeFlowAuthentication(username,
-                            Long.parseLong(userId), Long.parseLong(companyId)));
+//                   SecurityContextHolder.getContext().setAuthentication(new TradeFlowAuthentication(username,
+//                            Long.parseLong(userId), Long.parseLong(companyId)));
                 }
 
             } catch (Exception e) {
@@ -76,9 +77,8 @@ public class UserServiceFilter implements Filter {
         }
     }
 
-    private boolean hasPermission(String uri) {
-//        return permissionService.getPermissionUriList(userRoleId)
-//                .stream().anyMatch(permissionUriView-> permissionUriView.getUri().equalsIgnoreCase(uri));
-        return true;
+    private boolean hasPermission(String uri, long userRoleId) {
+        return permissionService.getPermissionUriList(userRoleId)
+                .stream().anyMatch(permissionUriView-> permissionUriView.getUri().equalsIgnoreCase(uri));
     }
 }

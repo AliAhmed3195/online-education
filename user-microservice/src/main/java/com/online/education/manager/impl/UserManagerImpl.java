@@ -6,6 +6,7 @@ import com.online.education.exception.UserServiceException;
 import com.online.education.manager.UserManager;
 import com.online.education.request.ChangePasswordRequestDTO;
 import com.online.education.response.ChangePasswordResponseDTO;
+import com.online.education.response.GenericResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ public class UserManagerImpl implements UserManager {
         }
     }
     @Override
-    public GenericResponse createUser( TradeFlowUserRequestDto user ){
+    public GenericResponse createUser(TradeFlowUserRequestDto user ){
         TradeFlowUser tradeFlowUser = createTradeFlowUserObj(user);
         tradeFlowUserRepository.save(  tradeFlowUser );
         return GenericResponse.createSuccessResponse(environment.getProperty(USER_CREATED_SUCCESSFULLY));
