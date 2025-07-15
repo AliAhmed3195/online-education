@@ -118,45 +118,10 @@ public class InventoryItemServiceImpl implements InventoryItemService {
 
 
 
-    private void validateItemRequestObj( ItemRequestDTO itemRequestDTO){
-        if ( itemRequestDTO ==null) {
-            throw new IllegalArgumentException(environment.getProperty(INVALID_REQUEST));
-        } else {
-            StringBuffer stringBuffer = new StringBuffer();
-            if(itemRequestDTO.getName() == null ){
-                stringBuffer.append((stringBuffer.isEmpty() ? "" : ", ") + "Name is required");
-            }
-            if(itemRequestDTO.getItemCategoryId() == null ){
-                stringBuffer.append((stringBuffer.isEmpty() ? "" : ", ") + "Item Category is required");
-            }
-            if(itemRequestDTO.getSku() == null ){
-                stringBuffer.append((stringBuffer.isEmpty() ? "" : ", ") + "Sku is required");
-            }
-            if(!stringBuffer.isEmpty()){
-               throw new IllegalArgumentException(stringBuffer.toString());
-            }
-        }
-    }
 
-    private void createItemEntity( ItemRequestDTO itemRequestDTO ){
-            Item item = new Item();
-            item.setName(itemRequestDTO.getName());
-            item.setDescription(item.getDescription());
-            item.setItemCategory(item.getItemCategory());
-            item.setSku(itemRequestDTO.getSku());
-            if (!itemRequestDTO.getItemVariants().isEmpty()) {
-                int index = 0;
-                for (ItemVariant itemVariant : itemRequestDTO.getItemVariants()) {
-                    itemVariant.setPriceAdditional(itemRequestDTO.getItemVariants().get(index).getPriceAdditional());
-                    itemVariant.setColor(itemRequestDTO.getItemVariants().get(index).getColor());
-                    itemVariant.setSize(itemRequestDTO.getItemVariants().get(index).getSize());
-                    itemVariant.setItem(itemRequestDTO.getItemVariants().get(index).getItem());
-                    index++;
-                }
-            }
-            itemRepository.save(item);
-        }
-    private void validateItemRequestObj(ItemRequestDTO itemRequestDTO) {
+
+    
+    private void validateItemRequestObj( ItemRequestDTO itemRequestDTO ) {
         if (itemRequestDTO == null) {
             log.error("ItemRequestDTO is null");
             throw new IllegalArgumentException(environment.getProperty("invalid.request", "Invalid request: Item data is missing"));
