@@ -39,6 +39,7 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
         <dependency>
+
             <artifactId>jackson-annotations</artifactId>
             <groupId>com.fasterxml.jackson.core</groupId>
         </dependency>

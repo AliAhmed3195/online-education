@@ -155,13 +155,16 @@ public class UserManagerImpl implements UserManager {
         Specification<TradeFlowUser> specification =
                 SpecificationUtility.equalsValue("isActive", true);
         if( userSearchRequest.getCompanyId() != null ) {
-            specification = SpecificationUtility.equalsValue("companyId", userSearchRequest.getCompanyId());
+            specification = specification.and(SpecificationUtility.equalsValue("companyId", userSearchRequest.getCompanyId()));
         }
         if( userSearchRequest.getEmployeeId() != null ) {
-            specification = SpecificationUtility.containsValue("employeeId", userSearchRequest.getEmployeeId());
+            specification = specification.and(SpecificationUtility.containsValue("employeeId", userSearchRequest.getEmployeeId()));
         }
         if( userSearchRequest.getUsername() != null ) {
-            specification = SpecificationUtility.equalsValue("username", userSearchRequest.getUsername());
+            specification = specification.and(SpecificationUtility.equalsValue("username", userSearchRequest.getUsername()));
+        }
+        if( userSearchRequest.getUserTypeId() != null ) {
+            specification = specification.and(SpecificationUtility.equalsValue("userType","id", userSearchRequest.getUserTypeId()));
         }
         return specification;
     }

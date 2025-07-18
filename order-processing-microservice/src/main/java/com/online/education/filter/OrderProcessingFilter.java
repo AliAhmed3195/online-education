@@ -12,6 +12,7 @@ import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -55,10 +56,9 @@ public class OrderProcessingFilter implements Filter  {
 
                 if( hasPermission(req.getRequestURI()) ) {
                     hasPermission = true;
-//                    SecurityContextHolder.getContext().setAuthentication(new TradeFlowAuthentication(username,
-//                            Long.parseLong(userId), Long.parseLong(companyId)));
+                    SecurityContextHolder.getContext().setAuthentication(new TradeFlowAuthentication(username,
+                            Long.parseLong(userId), Long.parseLong(companyId), Long.parseLong(userRoleId)));
                 }
-
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }

@@ -3,17 +3,17 @@ package com.online.education.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ITEM_VARIANT")
-public class ItemVariant {
+@Builder
+@Table(name = "ITEM_IMAGE")
+public class ItemImage extends BaseEntity {
 
     @Id
     @Column(name = "ID")
@@ -21,17 +21,12 @@ public class ItemVariant {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="ITEM_ID", nullable = false)
+    @JoinColumn(name = "ITEM_ID", nullable = false)
     @JsonBackReference
     private Item item;
 
-    @Column(name = "COLOR")
-    private String color;
+    @Column(name = "IMAGE_PATH", nullable = false)
+    private String imagePath; // Stores file path or URL (e.g., "/uploads/item_1_image.jpg")
 
-    @Column(name = "SIZE")
-    private String size;
-
-    @Column(name= "PRICE_ADDITIONAL")
-    private Long priceAdditional;
 
 }

@@ -1,4 +1,4 @@
-//package com.online.education.entity;
+package com.online.education.entity;//package com.online.education.entity;
 //
 //import jakarta.persistence.*;
 //import lombok.AllArgsConstructor;

@@ -28,6 +28,14 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "customer_id", nullable = false)
     private TradeFlowUser customer;
 
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", nullable = false)
+    private TradeFlowUser supplierId;
+
+    @ManyToOne
+    @JoinColumn(name = "vendor_id", nullable = false)
+    private TradeFlowUser vendorId;
+
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> items;

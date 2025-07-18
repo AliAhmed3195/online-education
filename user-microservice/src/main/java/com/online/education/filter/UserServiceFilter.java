@@ -55,7 +55,7 @@ public class UserServiceFilter implements Filter {
 
         boolean hasPermission = false;
         if( StringUtils.isNotBlank(username) && StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(companyId)
-             && StringUtils.isNotBlank(userRoleId)) {
+            && StringUtils.isNotBlank(userRoleId)) {
             try {
                 if( hasPermission(req.getRequestURI(), Long.parseLong(userRoleId)) ) {
                     hasPermission = true;

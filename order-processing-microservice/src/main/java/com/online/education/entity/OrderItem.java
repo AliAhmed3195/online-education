@@ -22,9 +22,9 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-//    @ManyToOne
-//    @JoinColumn(name = "item_id", nullable = false)
-//    private Item item;
+    @ManyToOne
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

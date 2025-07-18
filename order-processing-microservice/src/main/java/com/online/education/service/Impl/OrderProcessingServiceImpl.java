@@ -5,6 +5,7 @@ import com.online.education.constant.OrderStatus;
 import com.online.education.entity.Order;
 import com.online.education.entity.OrderItem;
 import com.online.education.entity.TradeFlowUser;
+import com.online.education.filter.TradeFlowAuthentication;
 import com.online.education.repository.OrderRepository;
 import com.online.education.request.OrderIdRequest;
 import com.online.education.request.OrderRequestDTO;
@@ -20,7 +21,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -40,12 +42,12 @@ public class OrderProcessingServiceImpl implements OrderProcessingService {
     @Autowired
     private OrderRepository orderRepository;
 
+
+    private TradeFlowAuthentication getPrincipal() {
+        return  (TradeFlowAuthentication) SecurityContextHolder.getContext().getAuthentication();
+    }
     @Autowired
     private TradeFlowUserRepository userRepository;
-
-    private TradeFlowUser getPrincipal() {
-        return (TradeFlowUser) SecurityContextHolder.getContext().getAuthentication();
-    }
 
     @Override
     public GenericResponse createOrder(OrderRequestDTO orderRequestDTO){
@@ -89,19 +91,19 @@ public class OrderProcessingServiceImpl implements OrderProcessingService {
 
     public Order createOrderEntity( OrderRequestDTO orderRequestDTO){
         Order order = new Order();
-        Optional<TradeFlowUser> user = userRepository.findById( getPrincipal().getId() );
+        Optional<TradeFlowUser> user = userRepository.findById( getPrincipal().getUserId() );
 
         // Map the order items
         List<OrderItem> orderItems = orderRequestDTO.getItems().stream().map(itemDTO ->
                 OrderItem.builder()
                         .order(order)
                         .quantity(itemDTO.getQuantity())
+                        .id(itemDTO.getItemId())
                         .price(itemDTO.getPrice())
                         .build()
         ).toList();
         // Set items to the order
         order.setItems(orderItems);
-
         if( user.isPresent() ){
             order.setCustomer( user.get() );
         } else {
@@ -109,11 +111,10 @@ public class OrderProcessingServiceImpl implements OrderProcessingService {
             throw new IllegalArgumentException("Customer User not found");
         }
         order.setCreatedBy( getPrincipal().getUsername() );
-        order.setCreatedOn( getPrincipal().getCreatedOn() );
+//        order.setCreatedOn(  );
         order.setStatus( OrderStatus.ORDER_PLACED );
         order.setTotalPrice( orderRequestDTO.getTotalPrice() );
         order.setOrderNumber( generateOrderNumber() );
-
         return order;
     }
 

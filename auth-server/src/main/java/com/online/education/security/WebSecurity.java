@@ -77,7 +77,7 @@ public class WebSecurity {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3030")); // Allow the gateway origin
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3030", "http://localhost:4200")); // Allow the gateway origin
         config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
