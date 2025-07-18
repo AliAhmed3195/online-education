@@ -49,10 +49,6 @@ public class OrderProcessingServiceImpl implements OrderProcessingService {
     @Autowired
     private TradeFlowUserRepository userRepository;
 
-//    private TradeFlowAuthentication getPrincipal() {
-//        return  (TradeFlowAuthentication) SecurityContextHolder.getContext().getAuthentication();
-//    }
-
     @Override
     public GenericResponse createOrder(OrderRequestDTO orderRequestDTO){
         Order order = createOrderEntity(orderRequestDTO);
@@ -97,7 +93,6 @@ public class OrderProcessingServiceImpl implements OrderProcessingService {
         Order order = new Order();
         Optional<TradeFlowUser> user = userRepository.findById( getPrincipal().getUserId() );
 
-
         // Map the order items
         List<OrderItem> orderItems = orderRequestDTO.getItems().stream().map(itemDTO ->
                 OrderItem.builder()
@@ -109,9 +104,6 @@ public class OrderProcessingServiceImpl implements OrderProcessingService {
         ).toList();
         // Set items to the order
         order.setItems(orderItems);
-
-
-
         if( user.isPresent() ){
             order.setCustomer( user.get() );
         } else {
@@ -123,7 +115,6 @@ public class OrderProcessingServiceImpl implements OrderProcessingService {
         order.setStatus( OrderStatus.ORDER_PLACED );
         order.setTotalPrice( orderRequestDTO.getTotalPrice() );
         order.setOrderNumber( generateOrderNumber() );
-
         return order;
     }
 
